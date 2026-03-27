@@ -1,5 +1,11 @@
 # [Conceptualization] 22411841_박다래
 
+<p align="center">
+  <img src="로고_이미지_주소_넣는_곳" width="200" alt="CCM Logo">
+  <br>
+  <b>Campus Cat Mate (CCM)</b>
+</p>
+
 **Project Title:** 캠퍼스 냥이 메이트 (Campus Cat Mate)
 
 **Student No:** 22411841
