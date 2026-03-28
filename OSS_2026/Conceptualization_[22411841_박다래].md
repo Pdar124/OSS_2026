@@ -17,6 +17,7 @@
 | 03/27/2026 | **1.00** | First Draft | 박다래 |
 | 03/27/2026 | **1.10** | Refined Actor Roles (Student, Caregiver, Admin) | 박다래 |
 | 03/28/2026 | **1.11** | Refined diagrams and glossary| 박다래 |
+| 03/28/2026 | **1.12** | Added Real-time Map features and refined documentation| 박다래 |
 
 ---
 
@@ -40,12 +41,12 @@
 현재 캠퍼스 고양이 돌봄은 소수의 동아리원과 익명의 다수 학생에 의해 각자 이루어지고 있습니다. 이 과정에서 특정 고양이에게 사료 급여가 중복되어 비만이 되거나, 반대로 건강 이상 징후가 발견되어도 정보 공유가 늦어 방치되는 사각지대가 발생합니다. 저는 학생들이 평소처럼 사진을 찍어 올리는 가벼운 행위가 고양이의 건강을 지키는 유효한 데이터가 되길 바랐습니다. 학생들이 마주친 찰나의 기록들을 모아, 고양이와 인간이 더 건강하게 공존할 수 있는 환경을 만들고자 본 프로젝트를 기획하였습니다.
 
 ### 1.3 Goal
-본 프로그램의 최우선 목표는 **캠퍼스 전 구성원이 참여하는 체계적인 돌봄 네트워크 구축** 입니다. 
-첫째, 일반 학생들이 마주친 고양이를 실시간 제보하는 '<font color="blue">조우 기록 (Encounter Check)</font>' 기능을 통해 고양이의 현재 위치와 예상 동선을 분석하여 즐거움을 제공합니다. 
+본 프로그램의 최우선 목표는 캠퍼스 전 구성원이 참여하는 체계적인 돌봄 네트워크 구축입니다.
+첫째, 일반 학생들이 마주친 고양이를 실시간 제보하는 '<font color="blue">조우 기록 (Encounter Check)</font>' 기능과 이를 시각화한 '<font color="blue">실시간 지도 (Real-time Map)</font>'를 통해 고양이의 현재 위치와 예상 동선을 분석하여 즐거움을 제공합니다.
 둘째, 주기적으로 고양이를 돌보는 인원들에게 전용 권한을 부여하여 식단 및 건강 상태를 전문적으로 관리하게 함으로써 중복 급여와 같은 비효율적 돌봄을 방지합니다.
 
 ### 1.4 Target Market
-주 타겟은 고양이를 마주칠 때마다 반갑게 인사하며 사진을 남기고 싶어 하는 **평범한 재학생 및 교직원 전체(Student/Observer)**입니다. 또한, 주기적으로 사료를 챙기며 건강을 모니터링하는 <b>평범한 재학생 및 교직원 전체(Student/Observer)</b>가 핵심 사용자층입니다. 나아가 캠퍼스 고양이를 아끼는 <b>지역 주민들</b>까지 사용자 범위를 확장하고자 합니다.
+주 타겟은 고양이를 마주칠 때마다 반갑게 인사하며 사진을 남기고 싶어 하는 <b>평범한 재학생 및 교직원 전체(Student/Observer)</b>입니다. 또한, 주기적으로 사료를 챙기며 건강을 모니터링하는 <b>'캣맘/캣대디' 학생들과 돌봄 동아리(Caregiver/Guardian)</b>가 핵심 사용자층입니다. 나아가 캠퍼스 고양이를 아끼는 <b>지역 주민들</b>까지 사용자 범위를 확장하고자 합니다.
 
 ---
 
@@ -64,7 +65,8 @@ graph LR
 
     %% Data Inflow (Actors to System)
     Student -- "Encounter Log /<br/>Registration Request" --> System
-    Caregiver -- "Diet & Health Log /<br/>Wiki Edit" --> System
+    Caregiver -- "Encounter Log /
+    Diet & Health Log /<br/>Wiki Edit" --> System
     Admin -- "Approval & Authority /<br/>System Statistics" --> System
 
     %% Data Outflow (System to Actors)
@@ -115,12 +117,13 @@ graph LR
 | No | Use Case | Actor | Description |
 | :--- | :--- | :--- | :--- |
 | 1 | **Login** | All | 등록된 계정을 통해 시스템 권한을 획득하고 개인 세션을 유지한다. |
-| 2 | **Encounter Check** | Student, Caregiver | 고양이를 발견한 위치와 시간을 제보한다. 이때 시스템은 **영역 기반 식별 알고리즘**을 가동하여 해당 위치의 점유 개체를 추천한다. |
-| 3 | **Request Cat Reg.** | **Student, Caregiver** | 캠퍼스 내 미등록 고양이를 발견했을 때 사진과 특징을 첨부하여 **관리자에게 공식 등록을 요청**한다. |
+| 2 | **Encounter Check** | Student, Caregiver | 고양이를 발견한 위치/시간을 제보하며, <font color="blue">영역 기반 식별 알고리즘</font>을 통해 후보 개체를 추천받아 기록을 확정한다. |
+| 3 | **Request Cat Reg.** | **Student, Caregiver** | 캠퍼스 내 미등록 고양이 발견 시 사진, 특징, 발견 위치를 첨부하여 <font color="blue">관리자 승인 큐(Approval Queue)</font>에 등록을 요청한다.|
 | 4 | **Approve Cat Reg.** | **Admin** | 이용자들의 신규 고양이 등록 요청 건을 검토하여 **공식 데이터로 승인 및 등록**을 완료한다. |
-| 5 | **Diet Check** | Caregiver | 고양이에게 제공한 사료 종류와 양을 기록하여 영양 공급 상태를 관리한다. |
-| 6 | **Wiki Edit** | Caregiver, Admin | 고양이의 특징, 건강 상태, 이름 유래 및 **주요 활동 영역** 정보를 최신 상태로 업데이트한다. |
+| 5 | **Diet Check** | Caregiver | 급여한 사료의 종류, 양 및 건강 특이사항을 기록하여 중복 급여 방지 및 건강 모니터링 데이터를 생성한다. |
+| 6 | **Wiki Edit** | Caregiver, Admin | 고양이의 특징, 건강 상태, 이름 유래 및 **주요 활동 영역(Territory)** 정보를 최신 상태로 업데이트한다. |
 | 7 | **History View** | All | 위키 내용의 과거 수정 이력을 조회하여 데이터의 신뢰성을 확인하고 악의적인 수정을 모니터링한다. |
+| 8 | **Real-time Map View** | All | 최근 제보 데이터와 <font color="blue">최근 제보 가중치(Recency Weight)</font>가 적용된 고양이별 실시간 예상 위치를 지도상에서 확인한다. |
 ---
 
 ## 4. Concept of operation
@@ -138,7 +141,7 @@ graph LR
 | :--- | :--- |
 | **Purpose** | 실시간 목격 위치를 수집하고 제보된 고양이가 누구인지 정확히 판별함. |
 | **Approach** | 사용자가 고양이를 발견해 위치를 제보하면, 시스템은 **해당 좌표를 중심으로 설정된 고양이별 '활동 영역(Territory)' 데이터**를 검색한다. 해당 구역의 주인인 고양이와 특징이 일치할 경우 시스템은 해당 개체를 최우선 후보로 추천하며, 사용자가 이를 확정하면 데이터가 통합 분석된다. |
-| **Dynamics** | 사용자가 고양이를 마주쳤으나 정확한 이름을 몰라 오제보가 우려되는 상황에서 발생. |
+| **Dynamics** | 사용자가 고양이를 마주쳤으나 정확한 개체를 식별하지 못해 데이터 오염이 우려되는 상황에서 발생. |
 | **Goals** | 영역 동물의 특성을 활용해 오제보를 방지하고, 실시간 위치 정보의 신뢰도를 극대화함. |
 
 ### 3. Caregiver Log management (돌봄 및 급여 현황 관리)
@@ -171,7 +174,7 @@ graph LR
 | Category | Description |
 | :--- | :--- |
 | **Data Integrity** | 모든 급여 및 건강 기록은 학번 ID와 결합되어 저장된다. 서버 측에서 모든 변경 이력을 **<font color="blue">Append-only Log</font>** 형태로 보관하며, 악의적인 조작에 대비해 변경 전후 스냅샷 보존 및 롤백 기능을 지원한다. |
-| **Data Validation** | 모든 이용자의 등록 요청이 가능하므로 발생하는 허위/중복 제보를 막기 위해 관리자 승인 시스템을 운영하며, 중복 가능성이 있는 요청은 시스템이 자동 필터링하여 관리자에게 알린다. |
+| **Data Validation** | 모든 이용자의 신규 개체 등록이 가능함에 따라 발생하는 허위/중복 제보를 막기 위해 관리자 승인 시스템을 운영하며, 중복 가능성이 있는 요청은 시스템이 자동 필터링하여 관리자에게 알린다. |
 
 ### 5.3 Reliability & Usability (신뢰성 및 사용성 - NFR)
 | Category | Description |
@@ -185,6 +188,7 @@ graph LR
 
 | Term | Definition |
 | :--- | :--- |
+| **Real-time Map (실시간 지도)**| 최근 수집된 조우 기록을 기반으로 고양이들의 현재 위치와 예상 동선을 지도 인터페이스상에 시각화하여 보여주는 기능. |
 | **Encounter Check (조우 기록)** | 사용자가 캠퍼스 내에서 고양이를 발견한 위치와 시간을 시스템에 제보하는 행위. 제보 시 영역 기반 식별 알고리즘을 통해 해당 개체를 추천한다. |
 | **Student (Observer)** | 위치 제보 및 신규 고양이 등록 요청이 가능한 일반 사용자. |
 | **Caregiver (Guardian)** | 등록 요청 및 전문 돌봄 기록(식단, 건강) 권한을 가진 인증된 사용자. |
@@ -201,11 +205,7 @@ graph LR
 
 | No | Source | Description / Context |
 | :--- | :--- | :--- |
-
 | **Ref-1** | 에브리타임 (Everytime) | 캠퍼스 커뮤니티 내 고양이 정보 공유 니즈 및 사용자 패턴 분석. |
-
 | **Ref-2** | 동물권행동 카라 (KARA) | 대학 길고양이 돌봄 가이드라인 : 체계적 모니터링 및 영역 관리 근거. |
-
 | **Ref-3** | Google Maps API | 캠퍼스 내 정확한 위치 태깅 및 영역 시각화를 위한 기술 문서. |
-
 | **Ref-4** | OpenWeatherMap API | 기상 상황에 따른 활동 패턴 및 영역 이동 보정용 데이터 수집. |
