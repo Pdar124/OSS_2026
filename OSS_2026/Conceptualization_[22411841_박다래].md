@@ -1,5 +1,10 @@
 # [Conceptualization] 22411841_박다래
 
+
+<p align="center">
+  <img src="CCM_LOGO.jpeg" width="80%" alt="Campus Cat Mate Logo">
+</p>
+
 **Project Title:** 캠퍼스 냥이 메이트 (Campus Cat Mate)
 
 **Student No:** 22411841
@@ -18,6 +23,7 @@
 | 03/27/2026 | **1.10** | Refined Actor Roles (Student, Caregiver, Admin) | 박다래 |
 | 03/28/2026 | **1.11** | Refined diagrams and glossary| 박다래 |
 | 03/28/2026 | **1.12** | Added Real-time Map features and refined documentation| 박다래 |
+| 03/28/2026 | **1.13** | Refined project logo | 박다래 |
 
 ---
 
